@@ -1,4 +1,4 @@
-<% layout('layouts/boilerplate') %>
+<% layout('/layouts/boilerplate') %>
 <style>
     h1 {
             margin-bottom: 20px;
@@ -25,43 +25,41 @@
             margin-bottom: 20px;
         }
 </style>
-<div id="cluster-map"></div>
-<div class="container">
-    <h1>All Campgrounds</h1>
+<div id="map" style="width: 100%; height:500px"></div>
 
-    <% for(let campground of campgrounds) { %>
-        <div class="card mb-3">
-            <div class="row">
-                <div class="col-md-4">
-                    <% if(campground.images.length) { %>
-                    <img crossorigin="anonymous" class="img-fluid" alt="" src="<%= campground.images[0].url %>">
-                    <% } else { %>
-                        <img crossorigin="anonymous" class="img-fluid" alt="" src="https://res.cloudinary.com/dlrlgzxs1/image/upload/v1714807566/YelpCamp/rtn3zg6ioto6us2cgvts.avif">
-                    <% } %>    
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <%= campground.title %>
-                        </h5>
-                            <%= campground.description %>
-                        </p>
-                        <p class="card-text">
-                            <small class="text-muted">
-                                <%= campground.location %>
-                            </small>
-                        </p>
-                        <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">View <%= campground.title
-                                %></a>
+    <div class="container">
+        <h1>All Campgrounds</h1>
+        <a href="/campgrounds/news" class="btn btn-primary btn-add">Add Campground</a>
+        <ul>
+            <% for(let c of campgrounds) { %>
+            <li>
+                <div class="card mb-3">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <% if (c.imageURL.length) { %>
+                            <img src="<%= c.imageURL[0].url %>" alt="Campground Image" class="card-img-top" crossorigin="anonymous">
+                            <% } else { %>
+                            <img src="https://via.placeholder.com/250" alt="Placeholder Image" class="card-img-top" crossorigin="anonymous">
+                            <% } %>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= c.title %></h5>
+                                <p class="card-text"><%= c.description %></p>
+                                <p class="card-text"><small class="text-muted"><%= c.location %></small></p>
+                                <a href="/campgrounds/<%= c._id %>" class="btn btn-primary">View</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <% } %>
-</div>
-        <script>
-            const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
-            const campgrounds = {features: <%- JSON.stringify(campgrounds) %>};
-        </script>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+<script>
+  const mapToken='<%-process.env.MAPBOX_TOKEN %>'
+  const campgrounds= {features: <%- JSON.stringify(campgrounds) %>}
+ </script> 
+    <script src="/javascripts/clusterMap.js">
 
-        <script src="/javascripts/clusterMap.js"></script>
+    </script>
